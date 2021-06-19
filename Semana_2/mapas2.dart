@@ -1,106 +1,129 @@
-import "dart:io";
+import 'dart:io';
 
-List personas = []; //Generamos la lista donde se almacenaran los valores
+void main() {
+  final menu = new personas();
+  menu.menu();
 
-void main() { // Iniciamos la aplicacion con main
-	
-  print("\nMenú: \n");  //Imprimos las opciones en consola
-	print("1 Mostrar todos los datos.");
-	print("2 Insertar un nuevo registro.");
-	print("3 Modificar un registro.");
-	print("4 Borrar un registro.");
-	print("5 Salir.\n");
-	
-	int opcion = 1;
-	while (opcion > 0 && opcion < 5) {
-		print("Por favor elija una opcion: ");
-		opcion = int.parse(stdin.readLineSync()); //Introducimos la opcion deseada
-		if (opcion == 1) {
-			most_dat(personas); //Metodo para mostrar los datos de las personas
-		} 
-		else if (opcion == 2) {
-			int_dat(personas);  // Metodo para insertar	un registro		
-		} 
-		else if (opcion == 3) {
-			mod_element(personas);  //Metodo para modificar registros
-		}
-		else if (opcion == 4) {  //Metodo para eliminar registros
-			delete_reg(personas);
-		}
-	}
-	print("\n ___Hasta Luego___");
+  final question = new personas();
+  question.pregunta();
+
 }
 
-most_dat(List personas) {
-	if (personas.isEmpty){ print("Aun No hay registros.");}
-	else {
-		int contador = 1;
-		for (var datos in personas) {
-			print("Registro $contador:");
-			print("Nombre: ${datos["nombre"]}");
-			print("Telefóno: ${datos["telefono"]}");
-			print("E-mail: ${datos["email"]}\n");
-			contador++;
-		}
-	} 
-}
+List<dynamic> datasave = [];
 
-int_dat(List personas) {
-	print("Ingresa nombre:");
-	String nombre = stdin.readLineSync();
-	print("Ingresa telefono:");
-	String telefono = stdin.readLineSync();
-	print("Ingresa e-mail:");
-	String email = stdin.readLineSync();
-	Map <String, String> persona = {
-		"nombre" : nombre,
-		"telefono" : telefono,
-		"email" : email
-	};
-	personas.add(persona);
-	print("El registro se ha agregado correctamente.");
-}
+class personas {
+  void menu() {
+    print("--- Bienvenido ---");
 
-mod_element(List personas) {
-	String validacion = ""; //por si no cumple la condición
-	print("Ingresa el nombre de la persona a la que se le modificara su registro:");
-	String nombre = stdin.readLineSync();
-	for(var datos in personas) {
-		if (datos["nombre"] == nombre) {
-			print("¿Qué elemento desea modificar? ( nombre / telefono / email )");
-			String llave = stdin.readLineSync();
-			if (llave == "nombre" || llave == "telefono" || llave == "email") {
-				print("Ingrese dato a modificar: ");
-				String nuevo_valor = stdin.readLineSync();
-				datos[llave] = nuevo_valor;
-				print("El registro se ha actualizado correctamente.");
-			}
-			else {
-				print("La opción ingresada no es válida, intente de nuevo.");
-			}
-			validacion = "si cumplió la condición";
-		}
-	}
-	if (validacion == "") {
-		print("El nombre ingresado no es válido, intente de nuevo.");
-	}
-}
+    print("1 - Mostrar todos los registros");
+    print("2 - Insertar Nuevo registro");
+    print("3 - Modificar un registro");
+    print("4 - Borrar un registro");
+    print("5 - Terminar programa");
 
-delete_reg (List personas) {
-	String validacion = "";
-	print("Nombre de la persona que se eliminara:");
-	String nombre = stdin.readLineSync();
-	int index = 0;
-	for(var datos in personas) {
-		if (datos["nombre"] == nombre) {
-			personas.removeAt(index);
-			print("El registro se ha eliminado correctamente.");
-			validacion = "si cumplió la condición";
-			break;			
-		}
-		index++;
-	}
-	if (validacion == "") {
-		print("El nombre ingresado no es válido, intente de nuevo.");
-	}
+    print("Seleccione una opcion de acuerdo a los numeros");
+
+    int respuesta = 1;
+    respuesta = int.parse(stdin.readLineSync());
+
+    if (respuesta == 1) {
+      mostrar_datos();
+    }
+
+    if (respuesta == 2) {
+      almacenar_datos();
+    }
+    if (respuesta == 3) {
+      modificar_datos();
+    }
+    if (respuesta == 4) {
+      eliminar_registros();
+    }
+  }
+
+  void almacenar_datos() {
+    print("Inserta el Nombre de la persona:");
+    var nombre_persona = stdin.readLineSync();
+
+    print("Inserta el Telefono:");
+    var numero_telefono = stdin.readLineSync();
+
+    print("Inserta un Correo electronico:");
+    var correo = stdin.readLineSync();
+
+    //List almacen = [id_sensor, valor, fecha];
+    Map<dynamic, dynamic> map_datos = {
+      "nombre_persona": nombre_persona,
+      "numero_telefono": numero_telefono,
+      "correo": correo
+    };
+    datasave.add(map_datos);
+    pregunta();
+  }
+
+  void mostrar_datos() {
+    print(datasave);
+      pregunta();
+  }
+
+  void modificar_datos() {
+    print("Nombre de la persona a la que se le hará la modificación");
+
+    var nombre = stdin.readLineSync();
+
+    for (var md in datasave) {
+      if (md["nombre"] == nombre) {
+        print("inserte el dato que se eliminará nombre, ntelefono o email");
+        print("||| Opciones |||");
+        print("nombre");
+        print("numero_telefono");
+        print("correo");
+        var modificacion = stdin.readLineSync();
+
+        if (modificacion == "nombre") {
+          print("Inserte el nuevo nuevo Nombre:");
+          var modificacion_nombre = stdin.readLineSync();
+          md[modificacion_nombre] = modificacion_nombre;
+          print("Se ha actualizado el Nombre correctamnte");
+        }
+
+        if (modificacion == "numero_telefono") {
+          print("Inserte el nuevo numero Telefonico");
+          var modificacion_numero_telefonico = stdin.readLineSync();
+          md[modificacion] = modificacion_numero_telefonico;
+          print("Se ha actualizado el Numero telefonico correctamnte");
+        }
+
+        if (modificacion == "correo") {
+          print("Escriba el dato que se modificará");
+          var modificacion_correo = stdin.readLineSync();
+          md[modificacion] = modificacion_correo;
+          print("Se ha actualizado el Correo electronico correctamnte");
+        }
+      }
+    }
+  }
+
+  void eliminar_registros() {
+    print("Inserte el nombre de la persona que se eliminara de los registros:");
+    var delete = stdin.readLineSync();
+    int dir = 0;
+    for (var quitar in datasave) {
+      if (quitar["nombre"] == delete) {
+        datasave.removeAt(dir);
+        print("Se eliminó el registro exitosamente");
+      }
+    }
+  }
+
+  void pregunta() {
+  print("¿Desea visualizar el menu nuevamente?");
+  var respuesta = stdin.readLineSync();
+  if (respuesta == "si") {
+    menu();
+    }
+  if (respuesta == "no"){
+    print("El programa ha finalizado.");
+    }
+  }
 }
